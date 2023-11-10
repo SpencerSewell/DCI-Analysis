@@ -1,7 +1,7 @@
 # Drum Corps International Analysis
 ## Project Summary
 --- 
-One of my favorite activities is Drum Corps International. It is best described as "marching music's major league" and has an extremely large fanbase around the world. Each corps compete in several competitions a year and are scored based on several factors including music, visuals, etc. The goal for this project was to scrape the scores provided on DCI's website, clean the data, and attempt to predict a winner based on previous years scoring. This project uses **BeautifulSoup** and **Pandas** in **Python** to scrape the scores, **SQL** to clean and explore the data, and **Tableau** to visualize the scores, trends, and predictions.
+One of my favorite activities is Drum Corps International. It is best described as "marching music's major league" and has an extremely large fanbase around the world. Each corps compete in several competitions a year and are scored based on several factors including music, visuals, etc. This project uses **BeautifulSoup** and **Pandas** in **Python** to scrape the scores.
 
 ## Web Scraping in Python
 [Check out the full code on repl.it](https://replit.com/@SpencerSewell/DCI-Web-Scraper#). Just click show code and then main.py!  
@@ -19,7 +19,7 @@ date = ''
 location = ''
 ```
 
-Next, we need to pull the links for each individual competition. On the DCI website, there are several competitions on a page, and several pages of competitions (Currently 87 pages). We need to iterate through each page and grab the link for each competition. The method below creates several lists within one big list.
+Next, we need to pull the links for each individual competition. On the DCI website, there are several competitions on a page, and several pages of competitions (currently 87 pages). We need to iterate through each page and grab the link for each competition. The method below creates several lists within one big list.
 ```
 url = 'https://www.dci.org/scores?page='
 for i in range(1,88):
@@ -125,6 +125,3 @@ print(combined_df)
 combined_df.to_csv (r'C:\Users\home\Desktop\Data Analysis\Project 1 - DCI Analysis\
 export_dataframe.csv', index = None, header=True)
 ```
-## Cleaning in PostgreSQL
-
-## Visualizing in Tableau
