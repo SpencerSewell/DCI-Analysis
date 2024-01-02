@@ -18,11 +18,30 @@ combined_df = pd.DataFrame()
 date = ''
 location = ''
 ```
+As DCI adds the scores for future competitions to the website, the amount of pages obviously increases. First, we define a function to scrape the total amount of pages that we will be iterating through.
+```
+def maxpage():
+  page = requests.get('https://www.dci.org/scores')
+  soup = bs(page.text, 'lxml')
+  pagination_div = soup.find('div', {'class': 'pagination'})
 
-Next, we need to pull the links for each individual competition. On the DCI website, there are several competitions on a page, and several pages of competitions (currently 87 pages). We need to iterate through each page and grab the link for each competition. The method below creates several lists within one big list.
+  if pagination_div:
+      total_span = pagination_div.find('span', {'class': 'total'})
+      if total_span:
+        total_value = int(total_span.text)
+        print(f"Total Pages: {total_value}. Webscrape will begin momentarily")
+        return total_value
+      else:
+          print("Total span not found")
+  else:
+      print("Pagination div not found")
+
+max_page = maxpage()
+```
+Next, we need to pull the links for each individual competition. On the DCI website, there are several competitions on a page, and several pages of competitions. We need to iterate through each page and grab the link for each competition. The method below creates several lists within one big list.
 ```
 url = 'https://www.dci.org/scores?page='
-for i in range(1,88):
+for i in range(1, max_page):
     req = requests.get(url+str(i))
     soup = bs(req.text, 'lxml')
     box = soup.find('div', {'class': 'scores-table scores-listing'})
@@ -31,7 +50,7 @@ for i in range(1,88):
 ```
 Here is the code that iterates through these lists of links. We create two new empty lists. These will fill with the names of the corps that performed on a particular competition and the scores for that competition, these will be appended to a new list with all the gathered information later. In the next iteration of 'k', the lists reset for the next competition
 ```
-for j in range (0,87): 
+for j in range (0, max_page - 1): 
   for k in range(0,len(link_list[j])-1):
     corps_names = []
     scores = []
@@ -40,7 +59,7 @@ for j in range (0,87):
     url3 = url2.replace('final-scores','recap')
     page = requests.get(url3)
 ```
-Next, we begin crafting our table by pulling headers for our table. This grabs the Corps Name, General Effet, Visual, Music, Date, Location, Subtotal, Penalties, and Total headers. As you can see I simply appended the headers for date and location. The other headers were grabbed as some competitions emit columns randomly (Competition was cancelled, corps was not scored, incomplete data, etc.) We use a try-except method to avoid an error from incomplete data. I decided later to drop the penalites column, as there are only two instances in 11 years where a corps has received a penalty.
+Next, we begin crafting our table by pulling headers for our table. This grabs the Corps Name, General Effect, Visual, Music, Date, Location, Subtotal, Penalties, and Total headers. As you can see I simply appended the headers for date and location. The other headers were grabbed as some competitions emit columns randomly (Competition was cancelled, corps was not scored, incomplete data, etc.) Whenever a competition is cancelled or not scored for some reason, the data in their tables can get quite messy. In order to help me combat this, as sometimes the data can leak through the try-except method, I dropped the penalties column and readded it through sql. We will see how this helps in the next section.
 ```
     soup2 = bs(page.content, 'html.parser')
     html1 = soup2.find('div', {'class': 'top sort-item'})
@@ -124,4 +143,17 @@ print(combined_df)
 
 combined_df.to_csv (r'C:\Users\home\Desktop\Data Analysis\Project 1 - DCI Analysis\
 export_dataframe.csv', index = None, header=True)
+```
+## Cleaning up in SQL
+Now that we have a csv file, we can plug it into our sql database (I am using pgAdmin4 with PostgreSQL). First, we create our table.
+```
+CREATE TABLE dci_master(
+	corps_name varchar(255),
+	comp_date varchar(255),
+	comp_location varchar(255),
+	geneff DECIMAL(6,3),
+	vis DECIMAL(6,3),
+	mus DECIMAL(6,3),
+	sub DECIMAL(6,3),
+	total DECIMAL(6,3))
 ```
