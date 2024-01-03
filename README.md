@@ -41,7 +41,7 @@ max_page = maxpage()
 Next, we need to pull the links for each individual competition. On the DCI website, there are several competitions on a page, and several pages of competitions. We need to iterate through each page and grab the link for each competition. The method below creates several lists within one big list.
 ```
 url = 'https://www.dci.org/scores?page='
-for i in range(1, max_page):
+for i in range(1, max_page+1):
     req = requests.get(url+str(i))
     soup = bs(req.text, 'lxml')
     box = soup.find('div', {'class': 'scores-table scores-listing'})
@@ -68,16 +68,27 @@ Next, we begin crafting our table by pulling headers for our table. This grabs t
     column.append('Date')
     column.append('Location')
     
-    try:
+   try:
       for i in range(1,5):
         html3 = soup2.find_all('div', {'class': 'title'})[i]
+        print(html3)
         column.append(html3.text.strip())
-      column.remove('')
-      column.remove('Penalties') 
+        print (column)
+      
+      if '' in column:
+        column.remove('')
+      
+      if 'Penalties' in column:
+        column.remove('Penalties')
+      
+      if 'Timing & Penalties' in column:
+        column.remove('Timing & Penalties')
+      
       column.append('Subtotal')
       column.append("Total")
-      
+    
     except:
+      print("Something weird happened")
       continue
 ```
 Now it's finally time to grab the good stuff, the scores! This code grabs all the corps names, the scores, the date, and the location for a particular competition.
