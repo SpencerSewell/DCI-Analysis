@@ -157,4 +157,20 @@ CREATE TABLE dci_master(
 	sub DECIMAL(6,3),
 	total DECIMAL(6,3))
 ```
-![alt text]([https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto1.png?raw=True)
+Let's take a look at what we are working with:
+![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto2.png?raw=True)
+Already, we can see that we are going to need to adjust the competition date's column. It will be much easier to work with in a YYYY-MM-DD format:
+![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto3.png?raw=True)
+The DCI scores website lists all the scores for both world class competitors and open class competitors. For this project we only want world class corps, so let's filter out the open class corps:
+![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto4.png?raw=True) 
+Now let's take a look and see if we have any missing or mixed up data. When we look at competitions where the subtotal does not equal the final total, we find some discrepencies. The common culprit in the data mixups is omitted data from DCI. It seems whenever a score is blank, the webscraper will skip this value and populate the list with the next int value. This leads to missmatched scores:
+![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto5.png?raw=True)
+Let's go ahead and re-create the penalties column we left out in the python code. This will help us see which data is correct and which data is incorrect:
+![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto6.png?raw=True)
+Some of the penalties seem either too large or are negative values. This gives us a good starting point as penalties are usually between 0 and 1.5 points:
+![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto7.png?raw=True)
+The list of affected data seems small, so we can manually fix the scores since the DCI website provides us with them:
+![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto8.png?raw=True)
+Finally, we can look at competitions where the total is NULL. If the last issue told us anything, any score that is left blank on the DCI website doesn't agree with our webscraper.
+![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto9.png?raw=True)
+After adjusting the scores within these competitions, we are left with clean data that we should now be able to analyze/visualize!
