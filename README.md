@@ -174,7 +174,7 @@ Already, we can see that we are going to need to adjust the competition date's c
 ![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto3.png?raw=True)
 The DCI scores website lists all the scores for both world class competitors and open class competitors. For this project we only want world class corps, so let's filter out the open class corps:
 ![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto4.png?raw=True) 
-.............................................. Now let's take a look and see if we have any missing or mixed up data. When we look at competitions where the subtotal does not equal the final total, we find some discrepencies. The common culprit in the data mixups is omitted data from DCI. It seems whenever a score is blank, the webscraper will skip this value and populate the list with the next int value. This leads to missmatched scores:
+Now let's take a look and see if we have any missing or mixed up data. When we look at competitions where the subtotal does not equal the final total, we find some discrepencies. The common culprit in the data mixups is omitted data from DCI. It seems whenever a score is blank, the webscraper will skip this value and populate the list with the next int value. This leads to missmatched scores:
 ![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto5.png?raw=True)
 Let's go ahead and re-create the penalties column we left out in the python code. This will help us see which data is correct and which data is incorrect:
 ![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIphoto6.png?raw=True)
