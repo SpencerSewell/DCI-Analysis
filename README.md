@@ -1,4 +1,4 @@
-# Drum Corps International Analysis
+# Drum Corps International Webscraper and Analysis
 ## Project Summary
 --- 
 One of my favorite activities is Drum Corps International. It is best described as "marching music's major league" and has an extremely large fanbase around the world. Each corps compete in several competitions a year and are scored based on several factors including music, visuals, etc. This project uses **BeautifulSoup** in **Python** to scrape the scores.
