@@ -188,7 +188,9 @@ After adjusting the scores within these competitions, we are left with clean dat
 ## Visualizing in PowerBI
 Now we can take a look at some numbers! The first page of the dashboard is a general dashboard: it holds interactive elements that allow users to change the date, location, and/or specific individual corps to analyze trends with competitions and make comparisons between different corps. The second page of the dashboard is all about averages. This showcases two things: The average 12th place score and lowest captions scores and the average 1st place score and caption scores. This gives users a general idea of what a corps needs to achieve in terms of captions and total score if they A. want to be a top 12 contender and B. if they want to be the finalist victor! In order to grab some of the numbers to display, additional SQL was written and imported:
 ![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIPhoto10.png?raw=True)
+Above is the SQL to find the total number of wins by corps. The CTE pulls the finals competition (Max day in August of every year) and the maximum score from that competition. This allows us to use the CTE to count how many max scores apply to each corps
 ![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIPhoto11.png?raw=True)
+This is an example SQL from a few cards used in the dashboard. This particular one uses the same CTE slightly adjusted to give us the finals competition. After that, we use a subquery to to find the minimum scores from the CTE, and the parent query averages these totals. This SQL is used for the average caption scores and 1st place scores cards
 ![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIPhoto12.png?raw=True)
 ![alt text](https://github.com/SpencerSewell/Pictures/blob/main/DCIPhoto13.png?raw=True)
 
