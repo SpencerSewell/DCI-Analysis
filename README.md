@@ -5,7 +5,7 @@ One of my favorite activities is Drum Corps International. It is best described 
 
 ## Web Scraping in Python 
 The first part of the scraper was just some simple imports and setting up some empty lists and variables to use later.
-```
+```python
 from bs4 import BeautifulSoup as bs
 import lxml
 import pandas as pd
@@ -18,7 +18,7 @@ date = ''
 location = ''
 ```
 As DCI adds the scores for future competitions to the website, the amount of pages obviously increases. First, we define a function to scrape the total amount of pages that we will be iterating through.
-```
+```python
 def maxpage():
   page = requests.get('https://www.dci.org/scores')
   soup = bs(page.text, 'lxml')
@@ -38,7 +38,7 @@ def maxpage():
 max_page = maxpage()
 ```
 Next, we need to pull the links for each individual competition. On the DCI website, there are several competitions on a page, and several pages of competitions. We need to iterate through each page and grab the link for each competition. The method below creates several lists within one big list.
-```
+```python
 url = 'https://www.dci.org/scores?page='
 for i in range(1, max_page+1):
     req = requests.get(url+str(i))
@@ -48,7 +48,7 @@ for i in range(1, max_page+1):
     link_list.append(links)
 ```
 Here is the code that iterates through these lists of links. We create two new empty lists. These will fill with the names of the corps that performed on a particular competition and the scores for that competition, these will be appended to a new list with all the gathered information later. In the next iteration of 'k', the lists reset for the next competition
-```
+```python
 for j in range (0, max_page - 1): 
   for k in range(0,len(link_list[j])-1):
     corps_names = []
@@ -59,7 +59,7 @@ for j in range (0, max_page - 1):
     page = requests.get(url3)
 ```
 Next, we begin crafting our table by pulling headers for our table. This grabs the Corps Name, General Effect, Visual, Music, Date, Location, Subtotal, Penalties, and Total headers. As you can see I simply appended the headers for date and location. The other headers were grabbed as some competitions emit columns randomly (Competition was cancelled, corps was not scored, incomplete data, etc.) Whenever a competition is cancelled or not scored for some reason, the data in their tables can get quite messy. In order to help me combat this, as sometimes the data can leak through the try-except method, I dropped the penalties column and readded it through sql. We will see how this helps in the next section.
-```
+```python
     soup2 = bs(page.content, 'html.parser')
     html1 = soup2.find('div', {'class': 'top sort-item'})
     html2 = html1.find('h4')
@@ -91,7 +91,7 @@ Next, we begin crafting our table by pulling headers for our table. This grabs t
       continue
 ```
 Now it's finally time to grab the good stuff, the scores! This code grabs all the corps names, the scores, the date, and the location for a particular competition.
-```
+```python
 #Pulls the names of the particular corps performing on that competition
     html4 = soup2.find('div', {'class': 'sticky-corps'})
     corps_list = html4.find_all('ul')
@@ -116,7 +116,7 @@ Now it's finally time to grab the good stuff, the scores! This code grabs all th
     location = location_element.text.strip()
 ```
 Lastly, we need to put all of the information together into a table format. We utilize pandas for this. When we pulled the scores, the first five numbers were for the first corps, the second set of five numbers were for the second corps, etc. The 'scores_list' method here takes care of this. If for some reason there are missing scores (notated as --- by DCI on the website) we insert a null value for our table. Again, we use a try-except to avoid errors. If an error pops up (usually for a day where no corps were scored, competition was cancelled, incomplete data, etc.) the code will skip this day and move on to the next.
-```
+```python
      #Pulls elements together into comprehensive lists, setting up for pandas. Some scores in early years were not recorded and are null values noted as '---' in the columns. 
     try:
       new_lists = []
@@ -148,7 +148,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.expand_frame_repr', False)
 ```
 All that's left to do is check the table to make sure everything looks correct, and save it as a csv file. In replit, it will show the head and the tail of the table.
-```
+```python
 print(combined_df)
 
 combined_df.to_csv (r'C:\Users\home\Desktop\Data Analysis\Project 1 - DCI Analysis\
@@ -156,7 +156,7 @@ export_dataframe.csv', index = None, header=True)
 ```
 ## Cleaning up in SQL
 Now that we have a csv file, we can plug it into our sql database (I am using pgAdmin4 with PostgreSQL). First, we create our table.
-```
+```sql
 CREATE TABLE dci_master(
 	corps_name varchar(255),
 	comp_date varchar(255),
