@@ -49,8 +49,8 @@ for i in range(1, max_page+1):
 ```
 Here is the code that iterates through these lists of links. We create two new empty lists. These will fill with the names of the corps that performed on a particular competition and the scores for that competition, these will be appended to a new list with all the gathered information later. In the next iteration of 'k', the lists reset for the next competition
 ```python
-for j in range (0, max_page - 1): 
-  for k in range(0,len(link_list[j])-1):
+for j in range (0, max_page): 
+  for k in range(0,len(link_list[j])):
     corps_names = []
     scores = []
     
