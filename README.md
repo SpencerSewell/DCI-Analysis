@@ -1,7 +1,7 @@
 # Drum Corps International Webscraper and Analysis
 ## Project Summary
 --- 
-One of my favorite activities is Drum Corps International. It is best described as "marching music's major league" and has an extremely large fanbase around the world. Each corps compete in several competitions a year and are scored based on several factors including music, visuals, etc. This project uses **BeautifulSoup** in **Python** to scrape the scores.
+One of my favorite activities is Drum Corps International. It is best described as "marching music's major league" and has an extremely large fanbase around the world. Each corps compete in several competitions a year and are scored based on several factors including music, visuals, etc. One of the questions I had was what the minimum threshold was for corps to make the finals competition (top 12), and what it took to be the best of the best (1st place). This project uses **BeautifulSoup** in **Python** to scrape the scores.
 
 ## Web Scraping in Python 
 The first part of the scraper was just some simple imports and setting up some empty lists and variables to use later.
